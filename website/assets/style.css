@@ -1,0 +1,470 @@
+/* ============================================================
+   GUM Landing Page - Custom Styles
+   ============================================================ */
+
+:root {
+    --bg: #0a0e1a;
+    --surface: #0f1729;
+    --surface-2: #1a2138;
+    --border: #1e293b;
+    --text: #e5e7eb;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --primary: #a855f7;
+    --secondary: #06b6d4;
+    --success: #10b981;
+    --warning: #eab308;
+    --error: #ef4444;
+}
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+    scroll-behavior: smooth;
+    background: var(--bg);
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+.font-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
+}
+
+/* ============================================================
+   Background Effects
+   ============================================================ */
+
+.bg-grid {
+    background-image:
+        linear-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, black 50%, transparent 100%);
+    mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, black 50%, transparent 100%);
+}
+
+.bg-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.bg-glow-purple {
+    background: var(--primary);
+    top: -200px;
+    left: -100px;
+}
+
+.bg-glow-cyan {
+    background: var(--secondary);
+    top: 200px;
+    right: -200px;
+}
+
+/* ============================================================
+   Gradient Text & Buttons
+   ============================================================ */
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.gradient-bg {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.5);
+}
+
+.btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: var(--surface-2);
+    border-color: var(--primary);
+}
+
+/* ============================================================
+   Terminal Window
+   ============================================================ */
+
+.terminal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.terminal-header {
+    background: var(--surface-2);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.terminal-dot-red { background: var(--error); }
+.terminal-dot-yellow { background: var(--warning); }
+.terminal-dot-green { background: var(--success); }
+
+.terminal-title {
+    color: var(--text-dim);
+    font-size: 0.875rem;
+    margin-left: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.terminal-body {
+    padding: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    min-height: 280px;
+}
+
+.term-prompt { color: var(--success); }
+.term-cmd { color: var(--text); }
+.term-out { color: var(--text-muted); }
+.term-success { color: var(--success); }
+.term-info { color: var(--secondary); }
+.term-warn { color: var(--warning); }
+.term-dim { color: var(--text-dim); }
+
+/* Blinking cursor */
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.2em;
+    background: var(--secondary);
+    vertical-align: middle;
+    margin-left: 2px;
+    animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* ============================================================
+   Feature Cards
+   ============================================================ */
+
+.feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.feature-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+}
+
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(6, 182, 212, 0.15));
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ============================================================
+   Install Tabs
+   ============================================================ */
+
+.install-tab {
+    padding: 0.75rem 1.25rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.install-tab:hover {
+    color: var(--text);
+    border-color: var(--text-dim);
+}
+
+.install-tab.active {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(6, 182, 212, 0.1));
+    color: var(--text);
+    border-color: var(--primary);
+}
+
+.install-content {
+    display: none;
+}
+
+.install-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   Code Block & Copy Button
+   ============================================================ */
+
+.code-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--text);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.code-prefix {
+    color: var(--success);
+    user-select: none;
+    margin-right: 0.5rem;
+}
+
+.copy-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.4rem 0.7rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.copy-btn:hover {
+    color: var(--text);
+    border-color: var(--primary);
+}
+
+.copy-btn.copied {
+    color: var(--success);
+    border-color: var(--success);
+}
+
+/* ============================================================
+   Comparison "Before/After" Boxes
+   ============================================================ */
+
+.compare-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.compare-card.bad {
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.compare-card.good {
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.compare-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    padding: 0.5rem 0;
+    color: var(--text-muted);
+}
+
+.compare-line.struck {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* ============================================================
+   Navigation
+   ============================================================ */
+
+.nav-blur {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(10, 14, 26, 0.8);
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-link {
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.nav-link:hover {
+    color: var(--text);
+}
+
+/* ============================================================
+   Stats / Badges
+   ============================================================ */
+
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .terminal-body {
+        font-size: 0.8rem;
+        padding: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-dim);
+}
+
+/* Selection */
+::selection {
+    background: rgba(168, 85, 247, 0.3);
+    color: white;
+}

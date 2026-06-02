@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>gum — Switch Git identities in one command</title>
+    <meta name="description" content="A tiny CLI that manages multiple Git accounts, SSH keys, and configs. Like nvm, but for your Git identities.">
+    <meta name="keywords" content="git, ssh, cli, identity, account, switch, manager, bash, developer tools">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="gum — Switch Git identities in one command">
+    <meta property="og:description" content="A tiny CLI that manages multiple Git accounts, SSH keys, and configs. Like nvm, but for your Git identities.">
+    <meta property="og:image" content="assets/brand/logo-512.png">
+    <meta property="og:url" content="https://ziyifast.github.io/gum/">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="gum — Switch Git identities in one command">
+    <meta name="twitter:description" content="A tiny CLI that manages multiple Git accounts. Like nvm, but for Git.">
+    <meta name="twitter:image" content="assets/brand/logo-512.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/logo-32.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="assets/brand/logo-64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="assets/brand/logo-128.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="assets/brand/logo-256.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#0a0e1a',
+                        surface: '#0f1729',
+                        'surface-2': '#1a2138',
+                        border: '#1e293b',
+                        primary: '#a855f7',
+                        secondary: '#06b6d4',
+                        success: '#10b981',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="bg-bg text-gray-200">
+
+    <!-- Background glow effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="bg-glow bg-glow-purple"></div>
+        <div class="bg-glow bg-glow-cyan"></div>
+    </div>
+
+    <!-- ============ Navigation ============ -->
+    <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5">
+                <img src="assets/brand/logo-64.png" alt="gum" class="w-8 h-8">
+                <span class="text-xl font-bold gradient-text">gum</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-surface border border-border text-gray-400 font-mono">v1.1.0</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-7">
+                <a href="#features" class="nav-link" data-i18n="nav.features">Features</a>
+                <a href="#install" class="nav-link" data-i18n="nav.install">Install</a>
+                <a href="https://github.com/ziyifast/gum#readme" class="nav-link" data-i18n="nav.docs">Docs</a>
+                <a href="https://github.com/ziyifast/gum" class="nav-link flex items-center gap-1.5">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    <span data-i18n="nav.github">GitHub</span>
+                </a>
+            </div>
+
+            <!-- Language toggle -->
+            <div class="flex items-center gap-1 bg-surface rounded-lg p-1 border border-border">
+                <button class="lang-btn px-2.5 py-1 text-xs font-medium rounded text-gray-400 transition" data-lang="en">EN</button>
+                <button class="lang-btn px-2.5 py-1 text-xs font-medium rounded text-gray-400 transition" data-lang="zh">中</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============ Hero ============ -->
+    <section class="relative pt-32 pb-20 px-6 overflow-hidden">
+        <div class="bg-grid absolute inset-0 opacity-50"></div>
+
+        <div class="max-w-6xl mx-auto relative">
+            <div class="text-center max-w-4xl mx-auto">
+                <!-- Hero Logo -->
+                <img src="assets/brand/logo-256.png" alt="gum" class="w-24 h-24 mx-auto mb-6 animate-float drop-shadow-2xl">
+
+                <!-- Badge -->
+                <a href="#" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface border border-border text-sm text-gray-300 mb-8 hover:border-primary transition">
+                    <span class="w-2 h-2 rounded-full bg-success animate-pulse-slow"></span>
+                    <span data-i18n="hero.badge">v1.1.0 — Now with arrow-key menus</span>
+                    <span class="text-gray-500">→</span>
+                </a>
+
+                <!-- Title -->
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight mb-6">
+                    <span data-i18n="hero.title.1">Switch Git identities</span><br>
+                    <span class="gradient-text" data-i18n="hero.title.2">in one command.</span>
+                </h1>
+
+                <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed" data-i18n="hero.subtitle">
+                    GUM is a tiny CLI that manages multiple Git accounts, SSH keys, and configs — like nvm, but for your Git identities.
+                </p>
+
+                <!-- CTA -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                    <a href="#install" class="btn-primary">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        <span data-i18n="hero.cta.primary">Get Started</span>
+                    </a>
+                    <a href="https://github.com/ziyifast/gum" class="btn-secondary">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 19.391l-7.416 4.022 1.48-8.279L0 9.306l8.332-1.151z"/></svg>
+                        <span data-i18n="hero.cta.secondary">Star on GitHub</span>
+                    </a>
+                </div>
+
+                <!-- Quick install -->
+                <div class="text-sm text-gray-500 mb-3" data-i18n="hero.install">or install via</div>
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <a href="#install" class="px-3 py-1.5 rounded-md bg-surface border border-border text-xs font-mono text-gray-300 hover:border-primary transition">brew install gum</a>
+                    <a href="#install" class="px-3 py-1.5 rounded-md bg-surface border border-border text-xs font-mono text-gray-300 hover:border-primary transition">scoop install gum</a>
+                    <a href="#install" class="px-3 py-1.5 rounded-md bg-surface border border-border text-xs font-mono text-gray-300 hover:border-primary transition">apt install gum</a>
+                </div>
+            </div>
+
+            <!-- Hero terminal -->
+            <div class="max-w-4xl mx-auto mt-16">
+                <div class="terminal animate-float">
+                    <div class="terminal-header">
+                        <span class="terminal-dot terminal-dot-red"></span>
+                        <span class="terminal-dot terminal-dot-yellow"></span>
+                        <span class="terminal-dot terminal-dot-green"></span>
+                        <span class="terminal-title">~ — gum — bash</span>
+                    </div>
+                    <div class="terminal-body">
+                        <pre id="hero-terminal-content" class="whitespace-pre-wrap m-0"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Pain Point ============ -->
+    <section class="py-24 px-6 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4" data-i18n="pain.title">The daily pain</h2>
+                <p class="text-lg text-gray-400" data-i18n="pain.subtitle">Every developer with multiple Git accounts knows this dance.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Before -->
+                <div class="compare-card bad">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-2xl">😤</span>
+                        <h3 class="text-lg font-semibold text-red-400" data-i18n="pain.before.title">Without gum</h3>
+                    </div>
+                    <div class="font-mono text-sm space-y-1">
+                        <div class="text-gray-500" data-i18n="pain.before.1"># Switching to work account...</div>
+                        <div class="text-gray-300" data-i18n="pain.before.2">git config --global user.name "zhangsan"</div>
+                        <div class="text-gray-300" data-i18n="pain.before.3">git config --global user.email "zhangsan@corp.com"</div>
+                        <div class="text-gray-500" data-i18n="pain.before.4"># Edit ~/.ssh/config manually...</div>
+                        <div class="text-gray-300" data-i18n="pain.before.5">ssh-add ~/.ssh/work_key</div>
+                        <div class="text-red-400" data-i18n="pain.before.6"># 😤 Repeat every. single. day.</div>
+                    </div>
+                </div>
+
+                <!-- After -->
+                <div class="compare-card good">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-2xl">✨</span>
+                        <h3 class="text-lg font-semibold text-emerald-400" data-i18n="pain.after.title">With gum</h3>
+                    </div>
+                    <div class="font-mono text-sm space-y-1">
+                        <div class="text-gray-500" data-i18n="pain.after.1"># Morning</div>
+                        <div class="text-gray-300" data-i18n="pain.after.2">gum use work</div>
+                        <div class="text-emerald-400" data-i18n="pain.after.3">✓ Switched to work</div>
+                        <div class="pt-2 text-gray-500" data-i18n="pain.after.4"># Evening</div>
+                        <div class="text-gray-300" data-i18n="pain.after.5">gum use home</div>
+                        <div class="text-emerald-400" data-i18n="pain.after.6">✓ Switched to home</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Features ============ -->
+    <section id="features" class="py-24 px-6 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span data-i18n="features.title">Everything you need</span>
+                </h2>
+                <p class="text-lg text-gray-400" data-i18n="features.subtitle">Built for developers who care about their workflow.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="text-lg font-semibold mb-2" data-i18n="features.1.title">One-command switching</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="features.1.desc">gum use work or gum use home — all your Git config and SSH keys swap instantly.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="text-lg font-semibold mb-2" data-i18n="features.2.title">Smart SSH detection</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="features.2.desc">Auto-reads your existing ~/.ssh/config so you don't have to retype anything.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔑</div>
+                    <h3 class="text-lg font-semibold mb-2" data-i18n="features.3.title">Auto key generation</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="features.3.desc">Generates ed25519 SSH keys for new identities. Public key shown for instant copy-paste.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="text-lg font-semibold mb-2" data-i18n="features.4.title">Non-destructive</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="features.4.desc">Your existing SSH config is never touched. gum manages its blocks via marker comments.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📁</div>
+                    <h3 class="text-lg font-semibold mb-2" data-i18n="features.5.title">Per-repo override</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="features.5.desc">Use a different identity for a single repo with --local. Global stays untouched.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⌨️</div>
+                    <h3 class="text-lg font-semibold mb-2" data-i18n="features.6.title">Interactive UI</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="features.6.desc">Arrow keys, vim bindings (j/k), or numbers — choose your preferred input style.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Install ============ -->
+    <section id="install" class="py-24 px-6 relative">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4" data-i18n="install.title">Install in seconds</h2>
+                <p class="text-lg text-gray-400" data-i18n="install.subtitle">Pick your platform.</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex flex-wrap gap-2 justify-center mb-6">
+                <button class="install-tab active" data-target="install-curl">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    curl
+                </button>
+                <button class="install-tab" data-target="install-brew">🍺 Homebrew</button>
+                <button class="install-tab" data-target="install-apt">🐧 apt</button>
+                <button class="install-tab" data-target="install-scoop">🪟 Scoop</button>
+                <button class="install-tab" data-target="install-source">📦 Source</button>
+            </div>
+
+            <!-- Tab contents -->
+            <div id="install-curl" class="install-content active">
+                <div class="code-block">
+                    <div>
+                        <span class="code-prefix">$</span>
+                        <span class="code-text">curl -fsSL https://raw.githubusercontent.com/ziyifast/gum/main/packaging/install-remote.sh | bash</span>
+                    </div>
+                    <button class="copy-btn">Copy</button>
+                </div>
+                <p class="text-sm text-gray-500 mt-3 text-center">Works on macOS, Linux, and WSL.</p>
+            </div>
+
+            <div id="install-brew" class="install-content">
+                <div class="space-y-3">
+                    <div class="code-block">
+                        <div>
+                            <span class="code-prefix">$</span>
+                            <span class="code-text">brew tap ziyifast/tap</span>
+                        </div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <div>
+                            <span class="code-prefix">$</span>
+                            <span class="code-text">brew install gum</span>
+                        </div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 mt-3 text-center">macOS / Linux. Auto-updates with brew upgrade.</p>
+            </div>
+
+            <div id="install-apt" class="install-content">
+                <div class="space-y-3">
+                    <div class="code-block">
+                        <div>
+                            <span class="code-prefix">$</span>
+                            <span class="code-text">wget https://github.com/ziyifast/gum/releases/download/v1.1.0/gum_1.1.0_all.deb</span>
+                        </div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <div>
+                            <span class="code-prefix">$</span>
+                            <span class="code-text">sudo dpkg -i gum_1.1.0_all.deb</span>
+                        </div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 mt-3 text-center">Debian / Ubuntu / Mint.</p>
+            </div>
+
+            <div id="install-scoop" class="install-content">
+                <div class="space-y-3">
+                    <div class="code-block">
+                        <div>
+                            <span class="code-prefix">&gt;</span>
+                            <span class="code-text">scoop bucket add ziyifast https://github.com/ziyifast/gum</span>
+                        </div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <div>
+                            <span class="code-prefix">&gt;</span>
+                            <span class="code-text">scoop install gum</span>
+                        </div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 mt-3 text-center">Windows. Requires Git for Windows (provides Git Bash).</p>
+            </div>
+
+            <div id="install-source" class="install-content">
+                <div class="space-y-3">
+                    <div class="code-block">
+                        <div>
+                            <span class="code-prefix">$</span>
+                            <span class="code-text">git clone https://github.com/ziyifast/gum.git</span>
+                        </div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <div class="code-block">
+                        <div>
+                            <span class="code-prefix">$</span>
+                            <span class="code-text">cd gum && sudo make install</span>
+                        </div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 mt-3 text-center">Build from source. Or use bash install.sh for user-local install.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Demo Workflow ============ -->
+    <section class="py-24 px-6 relative">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4" data-i18n="demo.title">See it in action</h2>
+                <p class="text-lg text-gray-400" data-i18n="demo.subtitle">A complete workflow, zero friction.</p>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span class="terminal-dot terminal-dot-red"></span>
+                    <span class="terminal-dot terminal-dot-yellow"></span>
+                    <span class="terminal-dot terminal-dot-green"></span>
+                    <span class="terminal-title">~ — gum init</span>
+                </div>
+                <div class="terminal-body font-mono text-sm">
+<pre class="whitespace-pre-wrap m-0">  <span class="term-info">GUM Quick Setup</span>
+  <span class="term-dim">─────────────────────────────────────────</span>
+
+  Default profiles: <span class="term-cmd">work home</span>
+
+  <span class="term-info">Profile names:</span> <span class="term-dim">(↑/↓ select, Enter confirm)</span>
+
+    <span class="term-success">❯ Use defaults: work home</span>
+      <span class="term-dim">Custom profile names</span>
+
+  <span class="term-dim">─────────────────────────────────────────</span>
+  <span class="term-info">Configure: work</span>
+
+  [work] Git user.name: <span class="term-cmd">zhangsan</span>
+  [work] Git user.email: <span class="term-cmd">zhangsan@corp.com</span>
+
+  <span class="term-success">Found existing SSH configs:</span>
+    <span class="term-dim">github.com (key: ~/.ssh/id_rsa_personal)</span>
+    <span class="term-success">❯ git.corp.com (key: ~/.ssh/id_rsa_work)</span>
+    <span class="term-dim">Generate new SSH key</span>
+
+  <span class="term-success">✓ Profile 'work' created!</span>
+
+  <span class="term-success">✓ Setup complete! Created 2 profile(s).</span>
+</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Why gum ============ -->
+    <section class="py-24 px-6 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4" data-i18n="why.title">Why gum?</h2>
+                <p class="text-lg text-gray-400" data-i18n="why.subtitle">A focused tool that does one thing extremely well.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="stat-card">
+                    <div class="text-5xl mb-3">🎯</div>
+                    <h3 class="text-xl font-semibold mb-2" data-i18n="why.1.title">Zero dependencies</h3>
+                    <p class="text-gray-400 text-sm" data-i18n="why.1.desc">Pure Bash. No Node, no Python, no compiled binary. Works everywhere bash works.</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">&lt; 50KB</div>
+                    <h3 class="text-xl font-semibold mb-2 mt-2" data-i18n="why.2.title">Small footprint</h3>
+                    <p class="text-gray-400 text-sm" data-i18n="why.2.desc">A single file. You can read every line in 20 minutes.</p>
+                </div>
+                <div class="stat-card">
+                    <div class="text-5xl mb-3">🔓</div>
+                    <h3 class="text-xl font-semibold mb-2" data-i18n="why.3.title">Open source</h3>
+                    <p class="text-gray-400 text-sm" data-i18n="why.3.desc">MIT licensed. No telemetry, no analytics, no surprises.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Final CTA ============ -->
+    <section class="py-24 px-6 relative">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4" data-i18n="cta.title">Ready to stop the dance?</h2>
+            <p class="text-lg text-gray-400 mb-10" data-i18n="cta.subtitle">Install gum in 5 seconds and never type git config --global again.</p>
+
+            <div class="code-block max-w-2xl mx-auto">
+                <div>
+                    <span class="code-prefix">$</span>
+                    <span class="code-text">curl -fsSL https://raw.githubusercontent.com/ziyifast/gum/main/packaging/install-remote.sh | bash</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                <a href="https://github.com/ziyifast/gum" class="btn-primary">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Footer ============ -->
+    <footer class="border-t border-border py-12 px-6 mt-12">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-10">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-2.5 mb-3">
+                        <img src="assets/brand/logo-64.png" alt="gum" class="w-8 h-8">
+                        <span class="text-xl font-bold gradient-text">gum</span>
+                    </div>
+                    <p class="text-gray-400 text-sm" data-i18n="footer.tagline">Switch Git identities in one command.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-sm mb-3" data-i18n="footer.product">Product</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://github.com/ziyifast/gum#readme" class="nav-link" data-i18n="footer.docs">Documentation</a></li>
+                        <li><a href="https://github.com/ziyifast/gum/blob/main/CHANGELOG.md" class="nav-link" data-i18n="footer.changelog">Changelog</a></li>
+                        <li><a href="https://github.com/ziyifast/gum/blob/main/docs/architecture.md" class="nav-link" data-i18n="footer.architecture">Architecture</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-sm mb-3" data-i18n="footer.community">Community</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://github.com/ziyifast/gum" class="nav-link">GitHub</a></li>
+                        <li><a href="https://github.com/ziyifast/gum/issues" class="nav-link" data-i18n="footer.issues">Issues</a></li>
+                        <li><a href="https://github.com/ziyifast/gum/blob/main/CONTRIBUTING.md" class="nav-link" data-i18n="footer.contributing">Contributing</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+                <span data-i18n="footer.license">Released under MIT License</span>
+                <span class="font-mono">© 2026 ziyifast</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/script.js"></script>
+</body>
+</html>

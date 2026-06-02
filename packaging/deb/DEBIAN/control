@@ -1,0 +1,20 @@
+Package: gum
+Version: 1.1.0
+Section: utils
+Priority: optional
+Architecture: all
+Depends: bash (>= 4.0) | zsh, git, openssh-client
+Maintainer: ziyifast <ziyifast@example.com>
+Homepage: https://github.com/ziyifast/gum
+Description: Git User Manager - switch between multiple Git identities
+ GUM (Git User Manager) is a lightweight CLI tool to manage and switch
+ between multiple Git identities (user.name, user.email, SSH keys).
+ Like nvm for Node.js versions, but for Git accounts.
+ .
+ Features:
+  * One-command identity switching (gum use work / gum use home)
+  * Auto-detection of existing ~/.ssh/config entries
+  * Automatic ed25519 SSH key generation
+  * Non-destructive SSH config management (marker comments)
+  * Per-repo identity override (--local)
+  * Interactive arrow-key menus
