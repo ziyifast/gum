@@ -82,6 +82,14 @@ curl -fsSL https://raw.githubusercontent.com/ziyifast/gum/main/packaging/install
 
 ### Homebrew (macOS / Linux)
 
+One-liner:
+
+```bash
+brew install ziyifast/tap/gum
+```
+
+Or in two steps if you prefer:
+
 ```bash
 brew tap ziyifast/tap
 brew install gum
@@ -92,7 +100,7 @@ brew install gum
 Download the `.deb` from [Releases](https://github.com/ziyifast/gum/releases):
 
 ```bash
-wget https://github.com/ziyifast/gum/releases/download/v1.1.0/gum_1.1.0_all.deb
+wget https://github.com/ziyifast/gum/releases/latest/download/gum_1.1.0_all.deb
 sudo dpkg -i gum_1.1.0_all.deb
 ```
 
